@@ -45,12 +45,9 @@ app.post('/add/userArchived/:id', async (req, res) => {
       userArchived._id = user._id
       userArchived.name = user.name
       userArchived.email = user.email
-      userArchived.save(function(error, doc){
-        if(error) {
-          res.send(String(error))
-        }
-        res.send(doc);
-      })
+      let doc = await userArchived.save()
+      await User.findByIdAndDelete({_id: req.params.id})
+      res.send(doc)
 })
 
 app.get('/userArchived', (req, res) => {
